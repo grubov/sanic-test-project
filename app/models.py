@@ -19,16 +19,12 @@ payments = Table('payments', metadata,
                  )
 
 
-# engine = create_engine('sqlite:///:memory:', echo=True)
 engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
-
-conn = engine.connect()
 metadata.create_all(engine)
-contracts.columns.items()
-
 
 ins = contracts.insert().values(title='A1', price='100.00', comment='Contract 1')
+
+conn = engine.connect()
 result = conn.execute(ins)
-# result.inserted_primary_key
 
 print(str(ins))
