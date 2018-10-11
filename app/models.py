@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, Float, String, MetaData, DateTime, ForeignKey, \
+from sqlalchemy import Table, Column, Integer, Float, String, MetaData, Date, ForeignKey, \
     create_engine
 
 metadata = MetaData()
@@ -8,23 +8,26 @@ contracts = Table('contracts', metadata,
                   Column('title', String, nullable=False),
                   Column('price', Float),
                   Column('comment', String),
-                  Column('expiration_date', DateTime)
+                  Column('expiration_date', Date)
                   )
 
 payments = Table('payments', metadata,
                  Column('id', Integer, primary_key=True, autoincrement=True),
                  Column('contracts_id', None, ForeignKey('contracts.id')),
                  Column('amount', Float),
-                 Column('date', DateTime)
+                 Column('date', Date)
                  )
 
 
 engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
+# metadata.drop_all(engine)
 metadata.create_all(engine)
 
-ins = contracts.insert().values(title='A1', price='100.00', comment='Contract 1')
+ins = contracts.insert().values(title='A1', price='100.00', comment='Contract 1', expiration_date='2018-01-18')
+# ins2 = contracts.insert().values(contracts_id='1', amount='20.00', date='2018-01-18')
+
 
 conn = engine.connect()
 result = conn.execute(ins)
 
-print(str(ins))
+# print(str(ins))
