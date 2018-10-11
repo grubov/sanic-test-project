@@ -23,15 +23,23 @@ async def get_contracts(request):
 
 @app.route('/', methods=['POST'])
 async def post_contract(request):
-    ins = select([contracts])
     conn = engine.connect()
     title = request.json.get('title')
     price = request.json.get('price')
     comment = request.json.get('comment')
-    user =
+    ins = contracts.insert()
 
-    result = conn.execute(ins)
-    return response.json({"POST": title})
+    # stmt = contracts.__table__.insert()
+    cont = {
+        'title': title,
+        'price': price,
+        'comment': comment
+    }
+    # conn.execute(stmt, cont)
+
+    result = conn.execute(ins, cont)
+
+    return response.json({"POST": "OK"})
 
 
 @app.route('/<contract_id:int>', methods=['GET'])
