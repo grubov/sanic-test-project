@@ -20,14 +20,14 @@ payments = Table('payments', metadata,
 
 
 engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
-# metadata.drop_all(engine)
-metadata.create_all(engine)
+# # metadata.drop_all(engine)
+# metadata.create_all(engine)
 
-ins = contracts.insert().values(title='A1', price='100.00', comment='Contract 1', expiration_date='2018-01-18')
-# ins2 = contracts.insert().values(contracts_id='1', amount='20.00', date='2018-01-18')
-
-
-conn = engine.connect()
-result = conn.execute(ins)
+# ins = contracts.insert().values(title='A1', price='100.00', comment='Contract 1', expiration_date='2018-01-18')
+# ins2 = payments.insert().values(contracts_id='2', amount='22.00', date='2018-01-18')
+#
+#
+# conn = engine.connect()
+# result = conn.execute(ins2)
 
 # print(str(ins))
