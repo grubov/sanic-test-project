@@ -1,6 +1,7 @@
 from sqlalchemy.sql import select
 
-from service_api.models import Contracts, engine
+from service_api.models import Contracts
+from service_api.database import engine
 
 
 async def get_contract_by_id(contract_id):
@@ -9,11 +10,17 @@ async def get_contract_by_id(contract_id):
     result = conn.execute(stmt)
     return dict(result.fetchone())
 
-#
-# @app.route('/<contract_id:int>', methods=['GET'])
-# async def get_contract(request, contract_id):
-#     """Get the contract from database with current contract_id"""
-#     s = select([contracts]).where(contracts.c.id == contract_id)
-#     conn = engine.connect()
-#     result = conn.execute(s)
-# return response.json({result})
+
+async def put_contract_by_id(request, contract_id):
+    json_data = request.json
+    u = Contracts.update().where(Contracts.c.id == contract_id)
+    conn = engine.connect()
+    result = conn.execute(u, json_data)
+    return {'PUT': 'OK'}
+
+
+async def delete_contract_by_id(contract_id):
+    d = Contracts.delete().where(Contracts.c.id == contract_id)
+    conn = engine.connect()
+    result = conn.execute(d)
+    return {'DELETE': 'OK'}
