@@ -1,4 +1,5 @@
 from sqlalchemy.sql import select
+import json
 
 from service_api.models import Contracts
 from service_api.database import engine
@@ -24,3 +25,15 @@ async def delete_contract_by_id(contract_id):
     conn = engine.connect()
     result = conn.execute(d)
     return {'DELETE': 'OK'}
+
+
+async def get_all_contracts():
+    """Get all contracts from database"""
+    s = select([Contracts])
+    conn = engine.connect()
+    result = conn.execute(s).fetchall()
+
+    res=[]
+    for i in result:
+        res.append(dict(i))
+    return res

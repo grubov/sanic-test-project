@@ -7,7 +7,7 @@ from service_api.app import app
 
 
 def runserver(host, port):
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
 
 
 def parse_args(args):
