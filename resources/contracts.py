@@ -33,3 +33,21 @@ class ContractsResource(BaseResource):
 
     async def put(self, request):
         pass
+
+
+class PaymentResource(BaseResource):
+    async def get(self, request):
+        contracts = await get_all_contracts()
+        return response.json(contracts)
+
+    async def post(self, request):
+        pass
+
+    async def put(self, request):
+        pass
+
+
+class SmokeResource(BaseResource):
+    async def get(self, request):
+        """Simple test"""
+        return response.json({"message": "OK"})

@@ -1,5 +1,4 @@
 from sqlalchemy.sql import select
-import json
 
 from service_api.models import Contracts
 from service_api.database import engine
@@ -32,7 +31,6 @@ async def get_all_contracts():
     s = select([Contracts])
     conn = engine.connect()
     result = conn.execute(s).fetchall()
-
     res=[]
     for i in result:
         res.append(dict(i))
