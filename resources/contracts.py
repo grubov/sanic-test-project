@@ -1,6 +1,7 @@
 from sanic import response
 
-from domain.contracts import get_contract_by_id, put_contract_by_id, delete_contract_by_id, get_all_contracts
+from domain.contracts import get_contract_by_id, put_contract_by_id, delete_contract_by_id
+from domain.contracts import get_all_contracts, post_new_contract
 from resources import BaseResource
 
 
@@ -27,7 +28,8 @@ class ContractsResource(BaseResource):
         return response.json(contracts)
 
     async def post(self, request):
-        pass
+        contracts = await post_new_contract(request)
+        return response.json(contracts)
 
     async def put(self, request):
         pass

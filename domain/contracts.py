@@ -37,3 +37,12 @@ async def get_all_contracts():
     for i in result:
         res.append(dict(i))
     return res
+
+
+async def post_new_contract(request):
+    """Post new contract to database"""
+    ins = Contracts.insert()
+    json_data = request.json
+    conn = engine.connect()
+    result = conn.execute(ins, json_data)
+    return {'POST': f'ADDED WITH ID={result.inserted_primary_key}'}

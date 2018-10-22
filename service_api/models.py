@@ -10,7 +10,7 @@ Contracts = Table(
     Column('title', String, nullable=False),
     Column('price', Float),
     Column('comment', String),
-    Column('expiration_date', Date(), default=date.today)
+    Column('expiration_date', Date, default=date.today)
 )
 
 Payments = Table(
@@ -19,5 +19,5 @@ Payments = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('contracts_id', None, ForeignKey('contracts.id')),
     Column('amount', Float),
-    Column('date', Date(), default=date.today)
+    Column('date', Date, default=date.today)
 )
