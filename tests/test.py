@@ -1,9 +1,10 @@
 from service_api.app import app
 
+
 def test_smoke():
     """Start with a blank database."""
     request, response = app.test_client.get('/contracts/v1/smoke')
-    assert response.status == 200
+    assert response.json.get("message") == "OK"
 
 
 def test_contracts_returns_200():
