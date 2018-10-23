@@ -1,5 +1,15 @@
 from service_api.app import app
+import aiohttp
 
+
+async def async_test_smoke():
+    """
+    GET request
+    """
+    resp = await app.test_cli.get('/contracts/v1/smoke')
+    assert resp.status == 200
+    resp_json = await resp.json()
+    assert resp_json == {"message": "OK"}
 
 def test_smoke():
     """Start with a blank database."""

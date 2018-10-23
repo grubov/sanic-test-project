@@ -5,6 +5,10 @@ from domain.contracts import get_all_contracts, post_new_contract
 from resources import BaseResource
 
 
+from marshmallow import ValidationError
+from service_api.services.schemas import (ContractSchema, PaymentSchema, ContractIdListSchema)
+
+
 class ContractResource(BaseResource):
     async def get(self, request, contract_id):
         contract = await get_contract_by_id(contract_id)
@@ -28,6 +32,11 @@ class ContractsResource(BaseResource):
         return response.json(contracts)
 
     async def post(self, request):
+        json_data = request.json
+        try:
+            mresult, errors = ContractSchema().load(json_data)
+        except ValidationError as err:
+            return response.json({"error": "err.messages"})
         contracts = await post_new_contract(request)
         return response.json(contracts)
 
