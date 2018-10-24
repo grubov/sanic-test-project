@@ -1,4 +1,5 @@
 from sanic import response
+from sanic.exceptions import InvalidUsage
 
 from domain.contracts import get_contract_by_id, put_contract_by_id, delete_contract_by_id
 from domain.contracts import get_all_contracts, post_new_contract
@@ -7,6 +8,7 @@ from resources import BaseResource
 
 from marshmallow import ValidationError
 from service_api.services.schemas import (ContractSchema, PaymentSchema, ContractIdListSchema)
+import json
 
 
 class ContractResource(BaseResource):
@@ -32,11 +34,13 @@ class ContractsResource(BaseResource):
         return response.json(contracts)
 
     async def post(self, request):
-        json_data = request.json
         try:
-            mresult, errors = ContractSchema().load(json_data)
+            json_data = request.json
+            data, errors = ContractSchema(strict=True).validate(json_data)
         except ValidationError as err:
-            return response.json({"error": "err.messages"})
+            return response.json({"error": err.messages})
+        except InvalidUsage as err:
+            return response.json({"error": "messages"})
         contracts = await post_new_contract(request)
         return response.json(contracts)
 
