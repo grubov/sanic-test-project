@@ -36,11 +36,11 @@ class ContractsResource(BaseResource):
     async def post(self, request):
         try:
             json_data = request.json
-            data, errors = ContractSchema(strict=True).validate(json_data)
+            ContractSchema(strict=True).validate(json_data)
         except ValidationError as err:
-            return response.json({"error": err.messages})
+            return response.json({"error": err.messages}, 400)
         except InvalidUsage as err:
-            return response.json({"error": "messages"})
+            return response.json({"error": "Invalid JSON"}, 400)
         contracts = await post_new_contract(request)
         return response.json(contracts)
 
