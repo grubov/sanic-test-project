@@ -1,7 +1,7 @@
 from sanic import response
 
 from domain.payments import get_payment_by_id, delete_payment_by_id
-from domain.payments import get_all_payments_for_current_contract, post_new_payment_for_current_contract
+from domain.payments import get_all_payments_for_current_contract, post_new_payment
 from resources import BaseResource
 
 
@@ -21,5 +21,5 @@ class PaymentsResource(BaseResource):
         return response.json(contracts)
 
     async def post(self, request, contract_id):
-        contracts = await post_new_payment_for_current_contract(request)
+        contracts = await post_new_payment(request)
         return response.json(contracts)

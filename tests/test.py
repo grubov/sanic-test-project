@@ -11,6 +11,7 @@ async def async_test_smoke():
     resp_json = await resp.json()
     assert resp_json == {"message": "OK"}
 
+
 def test_smoke():
     """Start with a blank database."""
     request, response = app.test_client.get('/contracts/v1/smoke')

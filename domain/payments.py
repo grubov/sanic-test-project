@@ -21,7 +21,7 @@ async def delete_payment_by_id(payment_id):
 
 async def get_all_payments_for_current_contract(contract_id):
     """Get all contracts from database"""
-    s = select([Payments]).where(Payments.c.contract_id == contract_id)
+    s = select([Payments]).where(Payments.c.contracts_id == contract_id)
     conn = engine.connect()
     result = conn.execute(s).fetchall()
     res = []
@@ -30,10 +30,11 @@ async def get_all_payments_for_current_contract(contract_id):
     return res
 
 
-async def post_new_payment_for_current_contract(request, contract_id):
+async def post_new_payment(request):
     """Post new contract to database"""
     ins = Payments.insert()
     json_data = request.json
+    print(json_data)
     conn = engine.connect()
     result = conn.execute(ins, json_data)
     return {'POST': f'ADDED WITH ID={result.inserted_primary_key}'}
