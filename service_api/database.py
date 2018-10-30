@@ -1,17 +1,14 @@
-import asyncio
-from aiopg.sa import create_engine
-# from sqlalchemy import create_engine
+from sqlalchemy import create_engine
 from service_api.models import metadata, Contracts, Payments
 
-# engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
-engine = create_engine(user='postgres', database='postgres', host='127.0.0.1', password='postgres')
+engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
 
 
-async def create_all():
+def create_all():
     metadata.create_all(engine)
 
 
-async def drop_all():
+def drop_all():
     metadata.drop_all(engine)
 
 
