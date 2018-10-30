@@ -12,10 +12,9 @@ async def get_contract_by_id(contract_id):
             stmt = select([Contracts]).where(Contracts.c.id == contract_id)
             result = await conn.execute(stmt)
             d = {}
-            # for rowproxy in result:
-            #     d = dict(rowproxy.items())
-            a = [i.items() for i in result]
-            return a
+            for rowproxy in result:
+                d = dict(rowproxy.items())
+            return d
 
 
 async def put_contract_by_id(request, contract_id):
