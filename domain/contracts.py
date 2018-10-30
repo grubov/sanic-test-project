@@ -1,8 +1,7 @@
 from sqlalchemy.sql import select
-
-from service_api.models import Contracts
-# from service_api.database import engine
 from aiopg.sa import create_engine
+# from service_api.database import engine
+from service_api.models import Contracts
 
 dsn = 'dbname=postgres user=postgres password=postgres host=127.0.0.1'
 
