@@ -1,14 +1,14 @@
 from sqlalchemy.sql import select
 from aiopg.sa import create_engine
-# from service_api.database import engine
+from service_api.database import engine
 from service_api.models import Contracts
 
 dsn = 'dbname=postgres user=postgres password=postgres host=127.0.0.1'
 
 
 async def get_contract_by_id(contract_id):
-    async with create_engine(dsn) as engine:
-        async with engine.acquire() as conn:
+    async with create_engine(dsn) as engine_aiopg:
+        async with engine_aiopg.acquire() as conn:
             stmt = select([Contracts]).where(Contracts.c.id == contract_id)
             result = await conn.execute(stmt)
             d = {}
