@@ -18,7 +18,8 @@ class ContractResource(BaseResource):
         pass
 
     async def put(self, request, contract_id):
-        contract = await put_contract_by_id(request, contract_id)
+        json_data = request.json
+        contract = await put_contract_by_id(json_data, contract_id)
         return response.json(contract)
 
     async def delete(self, request, contract_id):
@@ -39,8 +40,10 @@ class ContractsResource(BaseResource):
         #     return response.json({"error": err.messages}, 400)
         # except InvalidUsage as err:
         #     return response.json({"error": "Invalid JSON"}, 400)
-        contracts = await post_new_contract(request)
-        return response.json(contracts)
+        json_data = request.json
+        contract_id = await post_new_contract(json_data)
+        contract = await get_contract_by_id(contract_id)
+        return response.json(contract)
 
     async def put(self, request):
         pass
