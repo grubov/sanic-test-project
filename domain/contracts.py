@@ -39,10 +39,10 @@ async def get_all_contracts():
     s = select([Contracts])
     conn = engine.connect()
     result = conn.execute(s).fetchall()
-    res = []
+    result_list = []
     for i in result:
-        res.append(dict(i))
-    return res
+        result_list.append(dict(i))
+    return result_list
 
 
 async def post_new_contract(json_data):
@@ -51,5 +51,4 @@ async def post_new_contract(json_data):
     conn = engine.connect()
     result = conn.execute(ins, json_data)
     id = result.inserted_primary_key.pop()
-    # return {'id': id}
     return id
