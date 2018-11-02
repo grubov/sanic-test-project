@@ -1,12 +1,10 @@
 from sanic import response
-from sanic.exceptions import InvalidUsage, abort
+from marshmallow import ValidationError
 
 from domain.contracts import get_contract_by_id, put_contract_by_id, delete_contract_by_id
 from domain.contracts import get_all_contracts, post_new_contract
 from resources import BaseResource
-
-from marshmallow import ValidationError
-from service_api.services.schemas import (ContractSchema, PaymentSchema, ContractIdListSchema)
+from service_api.services.schemas import ContractSchema, PaymentSchema, ContractIdListSchema
 
 
 class ContractResource(BaseResource):

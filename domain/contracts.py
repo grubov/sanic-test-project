@@ -1,5 +1,6 @@
 from sqlalchemy.sql import select
 from aiopg.sa import create_engine
+
 from service_api.database import engine
 from service_api.models import Contracts
 
@@ -12,10 +13,10 @@ async def get_contract_by_id(contract_id):
         async with engine_aiopg.acquire() as conn:
             stmt = select([Contracts]).where(Contracts.c.id == contract_id)
             result = await conn.execute(stmt)
-            d = {}
+            contract = {}
             for rowproxy in result:
-                d = dict(rowproxy.items())
-            return d
+                contract = dict(rowproxy.items())
+            return contract
 
 
 async def put_contract_by_id(json_data, contract_id):
@@ -23,15 +24,17 @@ async def put_contract_by_id(json_data, contract_id):
     u = Contracts.update().where(Contracts.c.id == contract_id)
     conn = engine.connect()
     conn.execute(u, json_data)
-    return json_data
+    contract = await get_contract_by_id(contract_id)
+    return contract
 
 
 async def delete_contract_by_id(contract_id):
     """Delete contract by id from database"""
+    contract = await get_contract_by_id(contract_id)
     d = Contracts.delete().where(Contracts.c.id == contract_id)
     conn = engine.connect()
     conn.execute(d)
-    return {'DELETE': 'OK'}
+    return contract
 
 
 async def get_all_contracts():
@@ -50,5 +53,5 @@ async def post_new_contract(json_data):
     ins = Contracts.insert()
     conn = engine.connect()
     result = conn.execute(ins, json_data)
-    id = result.inserted_primary_key.pop()
-    return id
+    contract_id = result.inserted_primary_key.pop()
+    return contract_id
