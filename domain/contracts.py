@@ -3,16 +3,15 @@ from aiopg.sa import create_engine
 
 from service_api.database import engine
 from service_api.models import Contracts
-
-dsn = 'dbname=postgres user=postgres password=postgres host=127.0.0.1'
+from service_api.database import URI
 
 
 async def get_contract_by_id(contract_id):
     """Get all contracts from database"""
-    async with create_engine(dsn) as engine_aiopg:
+    async with create_engine(URI) as engine_aiopg:
         async with engine_aiopg.acquire() as conn:
-            stmt = select([Contracts]).where(Contracts.c.id == contract_id)
-            result = await conn.execute(stmt)
+            query = select([Contracts]).where(Contracts.c.id == contract_id)
+            result = await conn.execute(query)
             contract = {}
             for rowproxy in result:
                 contract = dict(rowproxy.items())
@@ -21,9 +20,9 @@ async def get_contract_by_id(contract_id):
 
 async def put_contract_by_id(json_data, contract_id):
     """Change contract by id in database"""
-    u = Contracts.update().where(Contracts.c.id == contract_id)
+    query = Contracts.update().where(Contracts.c.id == contract_id)
     conn = engine.connect()
-    conn.execute(u, json_data)
+    conn.execute(query, json_data)
     contract = await get_contract_by_id(contract_id)
     return contract
 
@@ -31,17 +30,17 @@ async def put_contract_by_id(json_data, contract_id):
 async def delete_contract_by_id(contract_id):
     """Delete contract by id from database"""
     contract = await get_contract_by_id(contract_id)
-    d = Contracts.delete().where(Contracts.c.id == contract_id)
+    query = Contracts.delete().where(Contracts.c.id == contract_id)
     conn = engine.connect()
-    conn.execute(d)
+    conn.execute(query)
     return contract
 
 
 async def get_all_contracts():
     """Get all contracts from database"""
-    s = select([Contracts])
+    query = select([Contracts])
     conn = engine.connect()
-    result = conn.execute(s).fetchall()
+    result = conn.execute(query).fetchall()
     result_list = []
     for i in result:
         result_list.append(dict(i))
@@ -50,8 +49,8 @@ async def get_all_contracts():
 
 async def post_new_contract(json_data):
     """Post new contract to database"""
-    ins = Contracts.insert()
+    query = Contracts.insert()
     conn = engine.connect()
-    result = conn.execute(ins, json_data)
+    result = conn.execute(query, json_data)
     contract_id = result.inserted_primary_key.pop()
     return contract_id
