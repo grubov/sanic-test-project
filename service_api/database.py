@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from service_api.models import metadata, Contracts, Payments
 
-
 engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
 
 
