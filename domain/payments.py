@@ -29,11 +29,10 @@ async def get_all_payments_for_current_contract(contract_id):
     return res
 
 
-async def post_new_payment(request):
-    """Post new contract to database"""
-    ins = Payments.insert()
-    json_data = request.json
-    print(json_data)
+async def post_new_payment(json_data):
+    """Add new payment to database"""
+    query = Payments.insert()
     conn = engine.connect()
-    result = conn.execute(ins, json_data)
-    return {'POST': f'ADDED WITH ID={result.inserted_primary_key}'}
+    result = conn.execute(query, json_data)
+    payment_id = result.inserted_primary_key.pop()
+    return payment_id
