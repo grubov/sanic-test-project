@@ -7,7 +7,7 @@ from service_api.database import URI
 
 
 async def get_contract_by_id(contract_id):
-    """Get all contracts from database"""
+    """Get contract by id from database"""
     async with create_engine(URI) as engine_aiopg:
         async with engine_aiopg.acquire() as conn:
             query = select([Contracts]).where(Contracts.c.id == contract_id)
