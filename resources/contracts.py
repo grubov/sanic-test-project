@@ -4,7 +4,7 @@ from marshmallow import ValidationError
 from resources import BaseResource
 from domain.contracts import get_contract_by_id, put_contract_by_id, delete_contract_by_id
 from domain.contracts import get_all_contracts, post_new_contract
-from service_api.services.schemas import ContractSchema, PaymentSchema
+from service_api.services.schemas import ContractSchema
 
 
 class ContractResource(BaseResource):
@@ -36,21 +36,3 @@ class ContractsResource(BaseResource):
         contract_id = await post_new_contract(data)
         contract = await get_contract_by_id(contract_id)
         return response.json(contract)
-
-
-class PaymentResource(BaseResource):
-    async def get(self, request):
-        contracts = await get_all_contracts()
-        return response.json(contracts)
-
-    async def post(self, request):
-        pass
-
-    async def put(self, request):
-        pass
-
-
-class SmokeResource(BaseResource):
-    async def get(self, request):
-        """Simple test"""
-        return response.json({"message": "ok"})

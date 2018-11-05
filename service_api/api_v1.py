@@ -1,7 +1,8 @@
 from sanic import Blueprint, Sanic
 
-from resources.contracts import ContractResource, ContractsResource, SmokeResource
+from resources.contracts import ContractResource, ContractsResource
 from resources.payments import PaymentResource, PaymentsResource
+from resources.smoke import SmokeResource
 from service_api.constants import SERVICE_NAME
 
 

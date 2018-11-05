@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, Float, String, MetaData, Date, ForeignKey
+from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, Float, String, Date, DateTime
 from datetime import date
 
 metadata = MetaData()
@@ -19,5 +19,5 @@ Payments = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('contracts_id', None, ForeignKey('contracts.id')),
     Column('amount', Float),
-    Column('date', Date, default=date.today)
+    Column('date_time', DateTime, default=date.today)
 )
