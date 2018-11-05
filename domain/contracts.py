@@ -48,7 +48,7 @@ async def get_all_contracts():
 
 
 async def post_new_contract(json_data):
-    """Post new contract to database"""
+    """Add new contract to database"""
     query = Contracts.insert()
     conn = engine.connect()
     result = conn.execute(query, json_data)
