@@ -3,12 +3,12 @@ from aiopg.sa import create_engine
 
 from service_api.database import engine
 from service_api.models import Contracts
-from service_api.database import URI
+from service_api.database import DSN
 
 
 async def get_contract_by_id(contract_id):
     """Get contract by id from database"""
-    async with create_engine(URI) as engine_aiopg:
+    async with create_engine(DSN) as engine_aiopg:
         async with engine_aiopg.acquire() as conn:
             query = select([Contracts]).where(Contracts.c.id == contract_id)
             result = await conn.execute(query)
