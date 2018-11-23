@@ -23,22 +23,9 @@ async def put_contract_by_id(json_data, contract_id):
     async with create_engine(DSN) as engine_aiopg:
         async with engine_aiopg.acquire() as conn:
             query = update(Contracts).where(Contracts.c.id == contract_id).values(**json_data)
-            print(query)
-            print(json_data)
             await conn.execute(query)
             contract = await get_contract_by_id(contract_id)
             return contract
-
-
-# async def put_contract_by_id(json_data, contract_id):
-#     """Change contract by id in database"""
-#     query = Contracts.update().where(Contracts.c.id == contract_id)
-#     conn = engine.connect()
-#     print(query)
-#     print(json_data)
-#     conn.execute(query, json_data)
-#     contract = await get_contract_by_id(contract_id)
-#     return contract
 
 
 async def delete_contract_by_id(contract_id):
