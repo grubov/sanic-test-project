@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from service_api.models import metadata, Contracts, Payments
 
 engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
+DSN = 'dbname=postgres user=postgres password=postgres host=127.0.0.1'
 
 
 def create_all():

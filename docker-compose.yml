@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  app:
+    build: .  # path to Dockerfile
+    container_name: stp_app
+    links:
+      - db:database  # makes the `db` service available as the hostname `database`
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASS: postgres
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:10.4
+    container_name: stp_db
+    restart: always
+    ports:
+      - "5433:5432"

@@ -1,40 +1,55 @@
-from sqlalchemy.sql import select
-import json
+from sanic.exceptions import abort
+from sqlalchemy.sql import select, and_
 
 from service_api.models import Payments
 from service_api.database import engine
 
 
-async def get_payment_by_id(payment_id):
-    s = select([Payments]).where(Payments.c.id == payment_id)
+async def get_payment_by_id(contract_id, payment_id):
+    """Get payment by id from database"""
+    query = select([Payments]).where(
+                                    and_(
+                                        Payments.c.id == payment_id,
+                                        Payments.c.contracts_id == contract_id
+                                    )
+                                )
     conn = engine.connect()
-    result = conn.execute(s)
-    return dict(result.fetchone())
+    result = conn.execute(query).fetchone()
+    if result:
+        return dict(result)
+    else:
+        return abort(404)
 
 
-async def delete_payment_by_id(payment_id):
-    d = Payments.delete().where(Payments.c.id == payment_id)
+async def delete_payment_by_id(contract_id, payment_id):
+    """Delete payment by id from database"""
+    payment = await get_payment_by_id(contract_id, payment_id)
+    query = Payments.delete().where(
+                                    and_(
+                                        Payments.c.id == payment_id,
+                                        Payments.c.contracts_id == contract_id
+                                    )
+                                )
     conn = engine.connect()
-    result = conn.execute(d)
-    return {'DELETE': 'OK'}
+    conn.execute(query)
+    return payment
 
 
 async def get_all_payments_for_current_contract(contract_id):
-    """Get all contracts from database"""
-    s = select([Payments]).where(Payments.c.contracts_id == contract_id)
+    """Get all payments from database for current contract"""
+    query = select([Payments]).where(Payments.c.contracts_id == contract_id)
     conn = engine.connect()
-    result = conn.execute(s).fetchall()
+    result = conn.execute(query).fetchall()
     res = []
     for i in result:
         res.append(dict(i))
     return res
 
 
-async def post_new_payment(request):
-    """Post new contract to database"""
-    ins = Payments.insert()
-    json_data = request.json
-    print(json_data)
+async def post_new_payment(json_data):
+    """Add new payment to database"""
+    query = Payments.insert()
     conn = engine.connect()
-    result = conn.execute(ins, json_data)
-    return {'POST': f'ADDED WITH ID={result.inserted_primary_key}'}
+    result = conn.execute(query, json_data)
+    payment_id = result.inserted_primary_key.pop()
+    return payment_id
