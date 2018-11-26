@@ -5,12 +5,14 @@ from resources import BaseResource
 from domain.contracts import get_contract_by_id, put_contract_by_id, delete_contract_by_id
 from domain.contracts import get_all_contracts, post_new_contract
 from service_api.services.schemas import ContractSchema
+from service_api.kafka_producer import producer
 
 
 class ContractResource(BaseResource):
     async def get(self, request, contract_id):
         """Get contract by id from database"""
         contract = await get_contract_by_id(contract_id)
+        producer.send('my-topic', key=b'key', value=b'operation: Get contract by id. success: true')
         return response.json(contract)
 
     async def put(self, request, contract_id):
@@ -31,6 +33,8 @@ class ContractsResource(BaseResource):
     async def get(self, request):
         """Get all contracts from database"""
         contracts = await get_all_contracts()
+        producer.send('my-topic', key=b'operation', value=b'get')
+        producer.send('my-topic', key=b'success', value=b'True')
         return response.json(contracts)
 
     async def post(self, request):

@@ -8,6 +8,7 @@ from service_api.database import DSN
 
 async def get_contract_by_id(contract_id):
     """Get contract by id from database"""
+
     async with create_engine(DSN) as engine_aiopg:
         async with engine_aiopg.acquire() as conn:
             query = select([Contracts]).where(Contracts.c.id == contract_id)
