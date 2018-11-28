@@ -1,5 +1,4 @@
 from kafka import KafkaConsumer
-from datetime import datetime
 import logging
 
 
@@ -8,11 +7,11 @@ consumer = KafkaConsumer('sanic',
                          bootstrap_servers=['0.0.0.0:9092'])
 
 
-logging.basicConfig(filename="sanic.log", level=logging.INFO)
+logging.basicConfig(filename="sanic.log", level=logging.INFO,
+                    format='%(asctime)s %(name)-5s: %(levelname)s %(message)s')
 
 for message in consumer:
     message.value.decode('utf-8')
-    logging.info(datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S,%f"))
     logging.info("%s:%d:%d: key=%s value=%s" % (message.topic, message.partition,
                                           message.offset, message.key,
                                           message.value))
