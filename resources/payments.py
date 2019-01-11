@@ -36,6 +36,6 @@ class PaymentsResource(BaseResource):
             raise ValidationError('ValidationError')
         data['contracts_id'] = contract_id
         payment_id = await post_new_payment(data)
-        payment = await get_payment_by_id(payment_id)
+        payment = await get_payment_by_id(contract_id, payment_id)
         producer.send('sanic', b'Operation: Add new payment. Success: True')
         return response.json(payment)

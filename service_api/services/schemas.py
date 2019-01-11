@@ -8,5 +8,4 @@ class ContractSchema(Schema):
 
 
 class PaymentSchema(Schema):
-    contracts_id = fields.Integer(required=True)
     amount = fields.Float(required=True)
