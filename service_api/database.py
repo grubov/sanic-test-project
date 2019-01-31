@@ -1,8 +1,12 @@
+import os
 from sqlalchemy import create_engine
 from service_api.models import metadata, Contracts, Payments
 
-engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres', echo=True)
-DSN = 'dbname=postgres user=postgres password=postgres host=127.0.0.1'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/postgres'
+# SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
+DSN = SQLALCHEMY_DATABASE_URI
 
 
 def create_all():
