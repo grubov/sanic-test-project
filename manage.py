@@ -30,7 +30,6 @@ def parse_args(args):
 
 def main(args=None):
     parsed_args = parse_args(args or sys.argv[1:])
-    print(parsed_args)
     if parsed_args.command == 'runserver':
         runserver(parsed_args.host, parsed_args.port)
     elif parsed_args.command == 'dbinit':

@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="vv (generated)" id="1548266110475-1">
+        <createTable tableName="contracts">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="contracts_pkey"/>
+            </column>
+            <column name="title" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="FLOAT8"/>
+            <column name="comment" type="VARCHAR"/>
+            <column name="expiration_date" type="date"/>
+            <column name="status" type="VARCHAR(8)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vv (generated)" id="1548266110475-2">
+        <createTable tableName="payments">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="payments_pkey"/>
+            </column>
+            <column name="contracts_id" type="INTEGER"/>
+            <column name="amount" type="FLOAT8"/>
+            <column name="date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vv (generated)" id="1548266110475-3">
+        <addForeignKeyConstraint baseColumnNames="contracts_id" baseTableName="payments" constraintName="payments_contracts_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="contracts" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

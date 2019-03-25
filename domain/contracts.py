@@ -30,28 +30,33 @@ async def put_contract_by_id(json_data, contract_id):
 
 async def delete_contract_by_id(contract_id):
     """Delete contract by id from database"""
-    contract = await get_contract_by_id(contract_id)
-    query = Contracts.delete().where(Contracts.c.id == contract_id)
-    conn = engine.connect()
-    conn.execute(query)
-    return contract
+    async with create_engine(DSN) as engine_aiopg:
+        async with engine_aiopg.acquire() as conn:
+            contract = await get_contract_by_id(contract_id)
+            query = Contracts.delete().where(Contracts.c.id == contract_id)
+            await conn.execute(query)
+            return contract
 
 
 async def get_all_contracts():
     """Get all contracts from database"""
-    query = select([Contracts])
-    conn = engine.connect()
-    result = conn.execute(query).fetchall()
-    result_list = []
-    for i in result:
-        result_list.append(dict(i))
-    return result_list
+    async with create_engine(DSN) as engine_aiopg:
+        async with engine_aiopg.acquire() as conn:
+            query = select([Contracts])
+            result = await conn.execute(query)
+            result_list = []
+            for i in result:
+                result_list.append(dict(i))
+            return result_list
 
 
 async def post_new_contract(json_data):
     """Add new contract to database"""
-    query = Contracts.insert()
-    conn = engine.connect()
-    result = conn.execute(query, json_data)
-    contract_id = result.inserted_primary_key.pop()
-    return contract_id
+    async with create_engine(DSN) as engine_aiopg:
+        async with engine_aiopg.acquire() as conn:
+            query = Contracts.insert().values(**json_data)
+            result = await conn.execute(query, json_data)
+            contract_id = None
+            async for row in result:
+                contract_id = row['id']
+            return contract_id
